@@ -1,0 +1,6 @@
+fastapi[all]
+requests
+pydantic==1.*
+openai
+bs4
+metaphor-python
