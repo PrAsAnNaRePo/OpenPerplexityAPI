@@ -42,6 +42,23 @@ def search(query: str, num_results: int):
 @app.post("/")
 def get_response(query: QueryInput):
     user_query = query.query
+
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+            "role": "system",
+            "content": "You are working as a Shopping Assistant in Shop.AI. Your job is to create a nice search query based on the user query.",
+            },
+            {
+            "role": "user",
+            "content": f"Here is the user query: {user_query}\nNOTE: generate only the apt serach query, no other text.",
+            }
+        ],
+        model=query.model,
+        max_tokens=1024
+    )
+    user_query = chat_completion.choices[0].message.content
+    print("searching for: ", user_query)
     num_results = query.num_results
     content = search(user_query, num_results)
     chat_completion = client.chat.completions.create(
